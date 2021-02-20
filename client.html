@@ -1,26 +1,33 @@
 <!doctype html>
 <html>
     <head>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <!-- This adapter.js file de-prefixes the webkit* and moz* prefixed RTC
-             methods. When RTC becomes a more solid standard, this adapter should no
-             longer be necessary. -->
-        <!-- <script src="https://webrtc.googlecode.com/svn/trunk/samples/js/base/adapter.js"></script> -->
+        <script src="/static/jquery/jquery.min.js"></script>
         <style>
-            html, body { 
-                background-color: #333; 
+            body {
+                background-color: #333;
+                display: flex;
+                flex-wrap: wrap;
+                margin: 8px;
             }
+
             video {
-                width:  320px;
-                height:  240px;
+                flex-grow: 1;
+                width: 400px;
                 border:  1px solid black;
+                box-sizing: border-box;
+                margin: 8px;
+                background: black;
+                max-height: calc(100vh - 32px);
             }
         </style>
 
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script>
-            /** CONFIG **/
-            var SIGNALING_SERVER = "https://rooms-test.herokuapp.com/";
+            if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+                var SIGNALING_SERVER = "http://localhost";
+            } else {
+                var SIGNALING_SERVER = "https://rooms-test.herokuapp.com";
+            }
             var USE_AUDIO = true;
             var USE_VIDEO = true;
             var DEFAULT_CHANNEL = 'some-global-channel-name';

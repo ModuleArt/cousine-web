@@ -1,13 +1,13 @@
 {
-  "name": "",
-  "version": "",
-  "description": "About =====",
+  "name": "cousine-web",
+  "version": "1.0.0",
+  "description": "Video/voice chat for 2+ people built-in on top of WebRTC",
   "scripts": {
-    "start": "node signaling-server"
+    "start": "node server"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "jquery": "^3.5.1",
     "socket.io": "^1.7.4"
   }
 }

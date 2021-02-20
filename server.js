@@ -1,34 +1,21 @@
-/**************/
-/*** CONFIG ***/
-/**************/
-var PORT = 8080;
+var PORT = process.env.PORT || 8001;
 
-
-/*************/
-/*** SETUP ***/
-/*************/
 var express = require('express');
 var http = require('http');
-var bodyParser = require('body-parser')
-var main = express()
-var server = http.createServer(main)
+var app = express();
+var server = http.createServer(app);
 var io  = require('socket.io').listen(server);
-//io.set('log level', 2);
 
-server.listen(process.env.PORT || PORT, null, function() {
+server.listen(PORT, null, function() {
     console.log("Listening on port " + PORT);
 });
-//main.use(express.bodyParser());
 
-main.get('/', function(req, res){ res.sendFile(__dirname + '/client.html'); });
-// main.get('/index.html', function(req, res){ res.sendfile('newclient.html'); });
-// main.get('/client.html', function(req, res){ res.sendfile('newclient.html'); });
+app.use('/static', express.static(__dirname + '/public'));
+app.use('/static/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
+app.get('/', function(req, res) { 
+    res.sendFile(__dirname + '/client.html'); 
+});
 
-
-
-/*************************/
-/*** INTERESTING STUFF ***/
-/*************************/
 var channels = {};
 var sockets = {};
 
