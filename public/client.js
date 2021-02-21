@@ -204,6 +204,13 @@ function init() {
         delete peers[peer_id];
         delete peer_media_elements[config.peer_id];
     });
+
+    // text chat
+
+    signaling_socket.on('chatMessage', function(config) {
+        console.log('Text message received:', config);
+        addTextMessage(config.peer_id, config.message);
+    });
 }
 
 
@@ -258,9 +265,7 @@ function appendMediaToBody(media, volumeSlider) {
         var div = $('<div class="client"><div class="controlbox"></div></div>');
     }
     $('.clients').append(div);
-    div.append(media);
-
-    console.log($("video"));
+    div.prepend(media);
     $("video")[0].muted = true;
 }
 
@@ -269,8 +274,21 @@ function removeMediaFromBody(media) {
 }
 
 function changeVolume(slider) {
-    let volume = slider.value / 100;
-    console.log(volume);
-    console.log($(slider).parent().next());
-    $(slider).parent().next()[0].volume = volume;
+    $(slider).parent().prev()[0].volume = slider.value / 100;
+}
+
+function addTextMessage(peerId, message) {
+    $(".chat").append(message + "\n");
+}
+
+function sendTextMessage() {
+    signaling_socket.emit("chatMessage", { "channel": DEFAULT_CHANNEL, "message": $(".message").val() });
+    $(".message").val("");
+}
+
+function messageKey(event) {
+    if (event.keyCode == 13) {
+        event.stopPropagation();
+        sendTextMessage();
+    }
 }

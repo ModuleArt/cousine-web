@@ -29,7 +29,7 @@ var sockets = {};
  * information. After all of that happens, they'll finally be able to complete
  * the peer connection and will be streaming audio/video between eachother.
  */
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function(socket) {
     socket.channels = {};
     sockets[socket.id] = socket;
 
@@ -42,6 +42,12 @@ io.sockets.on('connection', function (socket) {
         delete sockets[socket.id];
     });
 
+    socket.on('chatMessage', function(config) {
+        console.log("Chat message requested: " + config.message);
+        for (id in channels[config.channel]) {
+            channels[config.channel][id].emit('chatMessage', { 'peer_id': socket.id, 'message': config.message });
+        }
+    });
 
     socket.on('join', function (config) {
         console.log("["+ socket.id + "] join ", config);

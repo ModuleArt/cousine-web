@@ -7,6 +7,13 @@
         <script src="/static/client.js"></script>
     </head>
     <body onload="init()">
+        <div class="sidebar">
+            <div class="textchat">
+                <textarea class="chat" readonly placeholder="There are no messages yet"></textarea>
+                <textarea class="message" placeholder="Write a message..." onkeypress="messageKey(event)"></textarea>
+                <button class="send" onclick="sendTextMessage()">Send</button>
+            </div>
+        </div>
         <div class="clients"></div>
     </body>
 </html>
