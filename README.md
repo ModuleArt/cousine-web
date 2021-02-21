@@ -28,7 +28,7 @@ npm install -g socket.io express
 
 Then simply run the signaling server:
 ```
-node signaling-server.js
+node server.js
 ```
 
 ### Web server
