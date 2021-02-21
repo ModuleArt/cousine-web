@@ -28,7 +28,7 @@ function init() {
         setup_local_media(function() {
             /* once the user has given us access to their
                 * microphone/camcorder, join the channel and start peering up */
-            join_chat_channel(DEFAULT_CHANNEL, {'whatever-you-want-here': 'stuff'});
+            join_chat_channel(DEFAULT_CHANNEL, { 'whatever-you-want-here': 'stuff' });
         });
     });
     signaling_socket.on('disconnect', function() {
@@ -92,7 +92,7 @@ function init() {
             remote_media.attr("autoplay", "autoplay");
             peer_media_elements[peer_id] = remote_media;
 
-            appendMediaToBody(remote_media, true);
+            appendMediaToBody(remote_media, true, peer_id);
             attachMediaStream(remote_media[0], event.stream);
         }
 
@@ -239,14 +239,14 @@ function setup_local_media(callback, errorback) {
         element.srcObject = stream;
     };
 
-    navigator.getUserMedia({"audio":USE_AUDIO, "video":USE_VIDEO},
+    navigator.getUserMedia({ "audio": USE_AUDIO, "video": USE_VIDEO },
         function(stream) { /* user accepted access to a/v */
             console.log("Access granted to audio/video");
             local_media_stream = stream;
             var local_media = USE_VIDEO ? $("<video>") : $("<audio>");
             local_media.attr("autoplay", "autoplay");
 
-            appendMediaToBody(local_media, false);
+            appendMediaToBody(local_media, false, "Me");
             attachMediaStream(local_media[0], stream);
 
             if (callback) callback();
@@ -258,14 +258,22 @@ function setup_local_media(callback, errorback) {
         });
 }
 
-function appendMediaToBody(media, volumeSlider) {
+function appendMediaToBody(media, volumeSlider, nickname) {
     if (volumeSlider) {
-        var div = $('<div class="client"><div class="controlbox"><input onchange="changeVolume(this)" type="range" min="0" max="100" value="100" class="volume"></div></div>');
+        var div = $(`<div class="client">
+                        <div class="controlbox">
+                            <button onclick="changeMuted(this)"><img src="static/imgs/icons/sound.png" /></button>
+                            <input onchange="changeVolume(this)" type="range" min="0" max="100" value="100" class="volume" />
+                        </div>
+                    </div>`);
     } else {
         var div = $('<div class="client"><div class="controlbox"></div></div>');
     }
     $('.clients').append(div);
     div.prepend(media);
+
+    div.prepend($('<div class="client-header"><h4 class="nickname">' + nickname + '</h4></div>'));
+
     $("video")[0].muted = true;
 }
 
@@ -277,18 +285,41 @@ function changeVolume(slider) {
     $(slider).parent().prev()[0].volume = slider.value / 100;
 }
 
+function changeMuted(button) {
+    $(button).parent().prev()[0].muted = !$(button).parent().prev()[0].muted;
+    if ($(button).parent().prev()[0].muted) {
+        $(button).children()[0].src = "static/imgs/icons/muted.png";
+    } else {
+        $(button).children()[0].src = "static/imgs/icons/sound.png";
+    }
+}
+
 function addTextMessage(peerId, message) {
-    $(".chat").append(message + "\n");
+    let keys = Object.keys(peers);
+    let exists = false;
+    keys.map(function(key, index) {
+        if (key == peerId) {
+            exists = true;
+        }
+    });
+    if (!exists) {
+        peerId = "Me";
+    }
+    $(".chat").append(peerId + ": " + message + "\n");
 }
 
 function sendTextMessage() {
-    signaling_socket.emit("chatMessage", { "channel": DEFAULT_CHANNEL, "message": $(".message").val() });
-    $(".message").val("");
+    let text = $(".message").val();
+    if (text.length > 0) {
+        signaling_socket.emit("chatMessage", { "channel": DEFAULT_CHANNEL, "message": text });
+        $(".message").val("");
+    }
 }
 
 function messageKey(event) {
-    if (event.keyCode == 13) {
-        event.stopPropagation();
+    if (event.keyCode == 13 && !event.shiftKey) {
         sendTextMessage();
+        if(event.preventDefault) event.preventDefault(); 
+        return false;
     }
 }

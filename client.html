@@ -8,12 +8,21 @@
     </head>
     <body onload="init()">
         <div class="sidebar">
+            <h2>Chat</h2>
             <div class="textchat">
                 <textarea class="chat" readonly placeholder="There are no messages yet"></textarea>
-                <textarea class="message" placeholder="Write a message..." onkeypress="messageKey(event)"></textarea>
-                <button class="send" onclick="sendTextMessage()">Send</button>
+                <div class="chat-bottom">
+                    <textarea class="message" placeholder="Write a message..." onkeydown="messageKey(event)"></textarea>
+                    <button class="send" onclick="sendTextMessage()">Send</button>
+                </div>
             </div>
         </div>
-        <div class="clients"></div>
+        <div class="middlebox">
+            <h2>Users</h2>
+            <div class="clients"></div>
+        </div>
+        <div class="rightbox">
+            
+        </div>
     </body>
 </html>

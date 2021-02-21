@@ -1,5 +1,29 @@
+:root {
+    --dark1: #1c1c1c;
+    --dark2: #222;
+    --dark3: #2f2f2f;
+    --accent1: #db6400;
+    --accent2: #ffa62b;
+    --light1: #f8f1f1;
+}
+
+@font-face {
+    font-family: "RobotoC";
+    src: url("fonts/RobotoCondensed-Bold.ttf");
+    font-weight: bold;
+}
+@font-face {
+    font-family: "RobotoC";
+    src: url("fonts/RobotoCondensed-Regular.ttf");
+}
+@font-face {
+    font-family: "RobotoC";
+    src: url("fonts/RobotoCondensed-Light.ttf");
+    font-weight: 300;
+}
+
 body {
-    background-color: #555;
+    background-color: var(--dark1);
     margin: 0;
     display: flex;
     height: 100%;
@@ -7,8 +31,14 @@ body {
     width: 100%;
 }
 
+h2 {
+    font: bold 24px/32px RobotoC;
+    margin: 32px;
+    color: #fff;
+}
+
 .clients {
-    padding: 8px;
+    padding: 0 16px 16px 16px;
     width: 100%;
     box-sizing: border-box;
     max-height: 100%;
@@ -17,8 +47,8 @@ body {
 .client {
     display: inline-block;
     vertical-align: top;
-    width: 20%;
-    margin: 8px;
+    width: calc(50% - 32px);
+    margin: 0 16px 16px 16px;
 }
 
 .client video {
@@ -27,38 +57,41 @@ body {
     object-fit: cover;
     box-sizing: border-box;
     outline: none;
-    border-radius: 8px 8px 0 0;
     background: #444;
     height: 100%;
 }
 
-.client .controlbox {
-    padding: 8px;
-    background: #444;
+.controlbox {
+    background: var(--dark3);
     box-sizing: border-box;
-    border-radius: 0 0 8px 8px;
-    height: 48px;
+}
+
+.controlbox button {
+    display: inline-block;
+    padding: 0;
+    padding: 16px;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.controlbox button:hover {
+    background: var(--dark3);
+}
+
+.controlbox img {
+    display: inline-block;
+    vertical-align: top;
 }
 
 input[type='range'] {
     overflow: hidden;
     width: 120px;
     -webkit-appearance: none;
-    background-color: #333;
+    background-color: var(--dark2);
     outline: none;
-    vertical-align: middle;
-    margin: 8px;
+    margin: 23px 0;
     vertical-align: top;
-    position: relative;
-}
-
-input[type='range']::before {
-    content: "Volume";
-    position: absolute;
-    left: 3px;
-    top: 1px;
-    font: bold 14px/14px Arial;
-    color: #777;
 }
 
 input[type='range']::-webkit-slider-runnable-track {
@@ -71,21 +104,40 @@ input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     height: 16px;
     cursor: ew-resize;
-    background: #777;
-    box-shadow: -120px 0 0 120px #666;
+    background: var(--accent2);
+    box-shadow: -120px 0 0 120px var(--accent2);
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+    background: var(--accent1);
 }
 
 .sidebar {
     height: 100%;
     width: 20%;
-    padding: 16px 0 16px 16px;
     box-sizing: border-box;
+    background: var(--dark2);
+    display: flex;
+    flex-direction: column;
+}
+
+.middlebox {
+    flex: 1;
+}
+
+.rightbox {
+    width: 25%;
 }
 
 .sidebar .textchat {
-    display: flex;
-    height: 100%;
+    flex: 1;
     flex-direction: column;
+    display: flex;
+}
+
+.sidebar .chat-bottom {
+    display: flex;
+    background: var(--dark3);
 }
 
 .sidebar textarea {
@@ -95,39 +147,43 @@ input[type='range']::-webkit-slider-thumb {
     outline: none;
     resize: none;
     display: block;
-    background: #444;
     padding: 16px;
-    font: bold 14px/18px Arial;
+    font: 16px/24px RobotoC;
     color: #fff;
     box-sizing: border-box;
+    background: transparent;
 }
 
 .sidebar .chat {
     flex: 1;
-    border-radius: 8px 8px 0 0;
-}
-
-.sidebar .message {
-    height: 10vh;
-    margin-top: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--color3);
+    padding: 0 32px;
 }
 
 .sidebar .send {
     border: none;
-    background-color: #444;
-    border-radius: 0 0 8px 8px;
-    font: bold 14px/18px Arial;
+    background-color: var(--accent2);
+    border-radius: 0;
+    font: 16px/24px RobotoC;
     display: block;
     outline: none;
-    padding: 8px;
+    padding: 16px;
     box-sizing: border-box;
-    color: #fff;
+    color: var(--dark1);
 }
 
 .sidebar .send:hover {
-    background: #333;
+    background: var(--accent1);
 }
 
-.sidebar .send:active {
-    background: #222;
+.client-header {
+    background: var(--dark3);
+    padding: 8px 16px;
+}
+
+.client-header h4 {
+    font: 16px/24px RobotoC;
+    color: #fff;
+    margin: 0;
 }
